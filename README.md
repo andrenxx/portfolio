@@ -20,5 +20,3 @@ npm run dev
 ```bash
 CLOUDFLARE_ACCOUNT_ID=... npm run deploy
 ```
-
-Baseado no template de [Dillion Verma](https://github.com/dillionverma/portfolio) (MIT), redesenhado do zero.
