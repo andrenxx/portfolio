@@ -189,6 +189,40 @@ html { scrollbar-color: var(--thumb) var(--ground); scrollbar-width: thin; }
 .pcard:hover .pcard-cta .ico { transform: translateX(3px); }
 .badge { font-size: 12px; font-weight: 600; color: var(--accent-text); padding: 3px 9px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line-2); }
 
+/* Card largo em destaque (Ledger) */
+.pcard.is-wide { grid-column: 1 / -1; flex-direction: row; }
+.pcard.is-wide .pcard-visual { flex: 1.15; aspect-ratio: auto; min-height: 260px; border-bottom: 0; border-right: 1px solid var(--line); padding: 28px; }
+.pcard.is-wide .pcard-body { flex: 1; justify-content: center; padding: 28px; }
+.pcard.is-wide h3 { font-size: 38px; }
+@media (max-width: 760px) {
+  .pcard.is-wide { flex-direction: column; }
+  .pcard.is-wide .pcard-visual { border-right: 0; border-bottom: 1px solid var(--line); min-height: 0; padding: 18px; }
+  .pcard.is-wide .pcard-body { padding: 20px 22px 22px; }
+}
+
+/* Prévia do Ledger */
+.ledger { width: 100%; max-width: 460px; margin-inline: auto; font-variant-numeric: tabular-nums; }
+.ledger-head { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: var(--ink-3); padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.ledger-id { font-weight: 400; }
+.ledger-row, .ledger-sum { display: grid; grid-template-columns: 1fr auto 72px; gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.ledger-who { color: var(--ink); font-weight: 600; }
+.ledger-amount { font-weight: 700; text-align: right; }
+.ledger-row.is-debit .ledger-amount { color: var(--ink-2); }
+.ledger-row.is-credit .ledger-amount { color: var(--accent-text); }
+.ledger-after { color: var(--ink-3); font-size: 14px; text-align: right; }
+.ledger-sum { border-bottom: 0; color: var(--ink-3); font-size: 14px; }
+.ledger-sum .ledger-amount { color: var(--ink); }
+.ledger-ok { display: inline-flex; align-items: center; justify-content: flex-end; gap: 5px; color: var(--accent-text); font-weight: 600; font-size: 12px; grid-column: 3; white-space: nowrap; }
+.ledger-sum { grid-template-columns: 1fr auto auto; }
+.ledger-ok svg { width: 14px; height: 14px; }
+.ledger.is-compact .ledger-row, .ledger.is-compact .ledger-sum { padding: 9px 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .ledger-row { animation: ledger-row 6s var(--ease) infinite both; animation-delay: calc(var(--i) * 0.3s); }
+  .ledger-sum .ledger-ok { animation: ledger-ok 6s var(--ease) infinite both; animation-delay: 0.7s; }
+  @keyframes ledger-row { 0% { opacity: 0.3; transform: translateX(-8px); } 12%, 100% { opacity: 1; transform: none; } }
+  @keyframes ledger-ok { 0%, 4% { opacity: 0; transform: scale(0.9); } 14%, 100% { opacity: 1; transform: none; } }
+}
+
 /* Prévia compacta dentro do card */
 .demo.is-compact, .arch.is-compact { box-shadow: none; background: transparent; padding: 0; }
 .demo.is-compact .demo-input { font-size: 13px; }

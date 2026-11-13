@@ -3,12 +3,16 @@ import { DATA, TEXT, type Locale } from "@/data/resume";
 import ArchDiagram from "./arch-diagram";
 import { Arrow, ArrowRight, Bar, Footer, home, projectHref } from "./chrome";
 import DumpitDemo from "./dumpit-demo";
+import LedgerDemo from "./ledger-demo";
 
-export const SLUGS = ["dumpit", "clover-mmo"] as const;
+export const SLUGS = ["ledger", "dumpit", "clover-mmo"] as const;
 export type Slug = (typeof SLUGS)[number];
 
 function Visual({ locale, slug, compact }: { locale: Locale; slug: Slug; compact?: boolean }) {
   const t = TEXT[locale];
+  if (slug === "ledger") {
+    return <LedgerDemo l={t.ledger.demo} locale={t.htmlLang} compact={compact} />;
+  }
   if (slug === "dumpit") {
     const p = t.project;
     return <DumpitDemo input={p.input} columns={p.columns} cards={p.cards} note={p.demoNote} replay={p.replay} compact={compact} />;
@@ -18,6 +22,10 @@ function Visual({ locale, slug, compact }: { locale: Locale; slug: Slug; compact
 
 function info(locale: Locale, slug: Slug) {
   const t = TEXT[locale];
+  if (slug === "ledger") {
+    const g = t.ledger;
+    return { name: g.name, short: g.short, tags: g.tags, status: "", summary: g.summary, points: g.points, stack: g.stack, link: { href: DATA.ledgerUrl, label: g.link }, fine: g.fine, features: g.features, challenges: g.challenges, tools: [] as string[] };
+  }
   if (slug === "dumpit") {
     const p = t.project;
     return { name: p.name, short: p.short, tags: p.tags, status: "", summary: p.summary, points: p.points, stack: p.stack, link: { href: DATA.dumpitUrl, label: p.link }, fine: "", features: [] as string[], challenges: [] as { title: string; body: string }[], tools: [] as string[] };
@@ -34,7 +42,7 @@ export function ProjectCards({ locale }: { locale: Locale }) {
       {SLUGS.map((slug) => {
         const p = info(locale, slug);
         return (
-          <article className="pcard" key={slug}>
+          <article className={`pcard${slug === "ledger" ? " is-wide" : ""}`} key={slug}>
             <div className="pcard-visual" style={{ viewTransitionName: `pv-${slug}` }}>
               <Visual locale={locale} slug={slug} compact />
             </div>

@@ -13,8 +13,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang, slug } = await params;
   const t = TEXT[lang as Locale];
   if (!t) return {};
-  const name = slug === "dumpit" ? t.project.name : t.clover.name;
-  const short = slug === "dumpit" ? t.project.short : t.clover.short;
+  const name = slug === "ledger" ? t.ledger.name : slug === "dumpit" ? t.project.name : t.clover.name;
+  const short = slug === "ledger" ? t.ledger.short : slug === "dumpit" ? t.project.short : t.clover.short;
   return { title: name, description: short, alternates: { languages: { "pt-BR": `/p/${slug}`, en: `/en/p/${slug}`, es: `/es/p/${slug}` } } };
 }
 

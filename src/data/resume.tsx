@@ -21,6 +21,7 @@ export const DATA = {
   },
   dumpitUrl: "https://github.com/andrenxx/dumpit-app",
   cloverUrl: "https://clover-mmo-online.clover-mmo-online.workers.dev",
+  ledgerUrl: "https://github.com/andrenxx/ledger",
 };
 
 type Job = { title: string; company: string; period: string; bullets: string[]; stack: string };
@@ -41,6 +42,7 @@ type Text = {
   workTitle: string;
   work: Job[];
   projectTitle: string;
+  ledger: { name: string; short: string; tags: string; summary: string; points: string[]; features: string[]; challenges: { title: string; body: string }[]; stack: string; link: string; fine: string; demo: { tx: string; sum: string; ok: string; alice: string; bob: string } };
   clover: { features: string[]; challenges: { title: string; body: string }[]; tools: string[]; short: string; tags: string; status: string; name: string; meta: string; summary: string; points: string[]; stack: string; link: string; disclaimer: string; diagram: { title: string; player: string; browser: string; worker: string; workerSub: string; room: string; roomSub: string; db: string; dbSub: string; p2p: string; ws: string } };
   projectsLead: string;
   open: string;
@@ -102,7 +104,7 @@ export const TEXT: Record<Locale, Text> = {
       },
     ],
     projectTitle: "Projetos",
-    projectsLead: "Dois projetos meus, do app com IA ao jogo online.",
+    projectsLead: "Do backend financeiro em Java ao jogo online.",
     open: "Ver projeto",
     back: "Voltar",
     details: { what: "O que tem", built: "Como foi feito", stack: "Stack", links: "Links", features: "Funcionalidades", challenges: "Desafios técnicos", tools: "Ferramentas próprias" },
@@ -119,6 +121,19 @@ export const TEXT: Record<Locale, Text> = {
       columns: ["A fazer", "Fazendo", "Feito"],
       cards: [["Revisar PR do checkout", "Responder suporte"], ["Ajustar deploy OTA"], ["Atualizar dependências"]],
       input: "preciso revisar o PR do checkout, responder o suporte e ajustar o deploy OTA",
+    },
+    ledger: {
+      name: "Ledger",
+      short: "Contas e transferências com partidas dobradas, à prova de concorrência.",
+      tags: "Java · Spring Boot · PostgreSQL",
+      summary: "Serviço de contas, depósitos, saques, transferências e estornos em que toda movimentação vira partidas que somam zero. Nada é editado nem apagado, e transferências simultâneas nunca criam nem somem dinheiro.",
+      points: ["Trava pessimista ordenada (SELECT ... FOR UPDATE), sem deadlock em transferências cruzadas", "Idempotency-Key gravada na mesma transação da operação", "Regras repetidas no banco: saldo não negativo, soma zero no commit e tabelas só de inserção", "Extrato com paginação por cursor e balancete de auditoria", "Erros em Problem Details (RFC 9457) e métricas no Prometheus"],
+      features: ["Contas em BRL, USD e EUR", "Depósito, saque e transferência", "Estorno como um novo lançamento", "Extrato paginado", "Balancete que confere saldos e partidas"],
+      challenges: [{ title: "Concorrência sem saldo negativo", body: "50 transferências em paralelo disputando um saldo que só cobre 33: exatamente 33 passam, 17 são recusadas e o balancete fecha." }, { title: "Sem deadlock", body: "100 transferências cruzando A e B ao mesmo tempo terminam sem nenhum deadlock, porque as contas são sempre travadas na mesma ordem." }, { title: "Repetir não cobra duas vezes", body: "Com a mesma Idempotency-Key, a operação roda uma vez só e a repetição devolve a resposta original, mesmo chegando ao mesmo tempo." }],
+      stack: "Java 25 · Spring Boot 4 · JPA/Hibernate · PostgreSQL 17 · Flyway · Testcontainers · Docker · GitHub Actions",
+      link: "Ver código no GitHub",
+      fine: "19 testes, incluindo integração com PostgreSQL real via Testcontainers.",
+      demo: { tx: "Lançamento · TRANSFER", sum: "soma", ok: "balancete fecha", alice: "Alice", bob: "Bob" },
     },
     clover: {
       features: ["Combate com katanas, espada grande, arco e magias de grimório", "Vila e Bosque do Leste em mundo isométrico, com dia, noite e clima", "Pesca, missões, lojas e inventário", "Inimigos, um chefe (o Lobo Alfa) e um pet que segue e ataca", "Multiplayer com chat e grupo", "Login com Discord ou Google, 2 personagens por conta e save na nuvem"],
@@ -145,11 +160,11 @@ export const TEXT: Record<Locale, Text> = {
     stackTitle: "Stack",
     stack: [
       { group: "Front e mobile", items: "TypeScript, JavaScript, React, React Native, Next.js, Vite, Tailwind CSS, Zustand, HTML, CSS" },
-      { group: "Back-end", items: "Node.js, NestJS, Java, Python, APIs REST, WebSocket, OAuth" },
+      { group: "Back-end", items: "Node.js, NestJS, Java, Spring Boot, Python, APIs REST, WebSocket, OAuth" },
       { group: "Dados", items: "PostgreSQL, Supabase, SQL, migrations, RLS, presigned URLs (S3/R2)" },
       { group: "IA", items: "Agentes de IA, MCP, skills, Spec-Driven Development" },
       { group: "Cloud e infra", items: "Cloudflare, Docker, GitHub Actions, Grafana" },
-      { group: "Testes", items: "Jest, Vitest, Supertest" },
+      { group: "Testes", items: "JUnit, Testcontainers, Jest, Vitest, Supertest" },
     ],
     languagesTitle: "Idiomas",
     languages: "Português nativo, inglês intermediário",
@@ -202,7 +217,7 @@ export const TEXT: Record<Locale, Text> = {
       },
     ],
     projectTitle: "Projects",
-    projectsLead: "Two of my own projects, from an AI app to an online game.",
+    projectsLead: "From a Java financial backend to an online game.",
     open: "View project",
     back: "Back",
     details: { what: "What it does", built: "How it's built", stack: "Stack", links: "Links", features: "Features", challenges: "Technical challenges", tools: "Custom tools" },
@@ -219,6 +234,19 @@ export const TEXT: Record<Locale, Text> = {
       columns: ["To do", "Doing", "Done"],
       cards: [["Review checkout PR", "Reply to support"], ["Fix OTA deploy"], ["Update dependencies"]],
       input: "need to review the checkout PR, reply to support and fix the OTA deploy",
+    },
+    ledger: {
+      name: "Ledger",
+      short: "Accounts and transfers with double-entry bookkeeping, safe under concurrency.",
+      tags: "Java · Spring Boot · PostgreSQL",
+      summary: "A service for accounts, deposits, withdrawals, transfers and reversals where every movement becomes postings that sum to zero. Nothing is edited or deleted, and concurrent transfers never create or lose money.",
+      points: ["Ordered pessimistic locking (SELECT ... FOR UPDATE), no deadlocks on crossing transfers", "Idempotency-Key stored in the same database transaction as the operation", "Rules enforced in the database too: non-negative balance, zero-sum at commit and append-only tables", "Cursor-paginated statements and an audit trial balance", "Problem Details errors (RFC 9457) and Prometheus metrics"],
+      features: ["Accounts in BRL, USD and EUR", "Deposits, withdrawals and transfers", "Reversals as new entries", "Paginated statements", "Trial balance that checks balances against postings"],
+      challenges: [{ title: "Concurrency without overdrafts", body: "50 parallel transfers competing for a balance that only covers 33: exactly 33 succeed, 17 are rejected and the trial balance still closes." }, { title: "No deadlocks", body: "100 transfers crossing A and B at the same time finish without a single deadlock, because accounts are always locked in the same order." }, { title: "Retrying never charges twice", body: "With the same Idempotency-Key the operation runs once and the retry returns the original response, even when both arrive together." }],
+      stack: "Java 25 · Spring Boot 4 · JPA/Hibernate · PostgreSQL 17 · Flyway · Testcontainers · Docker · GitHub Actions",
+      link: "View code on GitHub",
+      fine: "19 tests, including integration tests against a real PostgreSQL via Testcontainers.",
+      demo: { tx: "Entry · TRANSFER", sum: "sum", ok: "trial balance closes", alice: "Alice", bob: "Bob" },
     },
     clover: {
       features: ["Combat with katanas, a greatsword, a bow and grimoire spells", "Village and East Woods in an isometric world, with day, night and weather", "Fishing, quests, shops and inventory", "Enemies, a boss (the Alpha Wolf) and a pet that follows and attacks", "Multiplayer with chat and parties", "Discord or Google sign-in, 2 characters per account and cloud saves"],
@@ -245,11 +273,11 @@ export const TEXT: Record<Locale, Text> = {
     stackTitle: "Stack",
     stack: [
       { group: "Front end & mobile", items: "TypeScript, JavaScript, React, React Native, Next.js, Vite, Tailwind CSS, Zustand, HTML, CSS" },
-      { group: "Back end", items: "Node.js, NestJS, Java, Python, REST APIs, WebSocket, OAuth" },
+      { group: "Back end", items: "Node.js, NestJS, Java, Spring Boot, Python, REST APIs, WebSocket, OAuth" },
       { group: "Data", items: "PostgreSQL, Supabase, SQL, migrations, RLS, presigned URLs (S3/R2)" },
       { group: "AI", items: "AI agents, MCP, skills, Spec-Driven Development" },
       { group: "Cloud & infra", items: "Cloudflare, Docker, GitHub Actions, Grafana" },
-      { group: "Testing", items: "Jest, Vitest, Supertest" },
+      { group: "Testing", items: "JUnit, Testcontainers, Jest, Vitest, Supertest" },
     ],
     languagesTitle: "Languages",
     languages: "Portuguese (native), English (intermediate)",
@@ -302,7 +330,7 @@ export const TEXT: Record<Locale, Text> = {
       },
     ],
     projectTitle: "Proyectos",
-    projectsLead: "Dos proyectos míos, de una app con IA a un juego online.",
+    projectsLead: "Del backend financiero en Java al juego online.",
     open: "Ver proyecto",
     back: "Volver",
     details: { what: "Qué hace", built: "Cómo está hecho", stack: "Stack", links: "Enlaces", features: "Funcionalidades", challenges: "Desafíos técnicos", tools: "Herramientas propias" },
@@ -319,6 +347,19 @@ export const TEXT: Record<Locale, Text> = {
       columns: ["Por hacer", "En curso", "Hecho"],
       cards: [["Revisar PR del checkout", "Responder a soporte"], ["Ajustar deploy OTA"], ["Actualizar dependencias"]],
       input: "tengo que revisar el PR del checkout, responder a soporte y ajustar el deploy OTA",
+    },
+    ledger: {
+      name: "Ledger",
+      short: "Cuentas y transferencias con partida doble, a prueba de concurrencia.",
+      tags: "Java · Spring Boot · PostgreSQL",
+      summary: "Servicio de cuentas, depósitos, retiros, transferencias y reversos donde cada movimiento se convierte en partidas que suman cero. Nada se edita ni se borra, y las transferencias simultáneas nunca crean ni pierden dinero.",
+      points: ["Bloqueo pesimista ordenado (SELECT ... FOR UPDATE), sin deadlock en transferencias cruzadas", "Idempotency-Key guardada en la misma transacción de la operación", "Reglas también en la base: saldo no negativo, suma cero en el commit y tablas solo de inserción", "Extracto con paginación por cursor y balance de auditoría", "Errores en Problem Details (RFC 9457) y métricas en Prometheus"],
+      features: ["Cuentas en BRL, USD y EUR", "Depósito, retiro y transferencia", "Reverso como un nuevo asiento", "Extracto paginado", "Balance que verifica saldos y partidas"],
+      challenges: [{ title: "Concurrencia sin saldo negativo", body: "50 transferencias en paralelo compitiendo por un saldo que solo cubre 33: pasan exactamente 33, 17 se rechazan y el balance cierra." }, { title: "Sin deadlock", body: "100 transferencias cruzando A y B al mismo tiempo terminan sin ningún deadlock, porque las cuentas siempre se bloquean en el mismo orden." }, { title: "Repetir no cobra dos veces", body: "Con la misma Idempotency-Key la operación corre una sola vez y la repetición devuelve la respuesta original, aunque lleguen juntas." }],
+      stack: "Java 25 · Spring Boot 4 · JPA/Hibernate · PostgreSQL 17 · Flyway · Testcontainers · Docker · GitHub Actions",
+      link: "Ver código en GitHub",
+      fine: "19 tests, incluidos de integración con PostgreSQL real vía Testcontainers.",
+      demo: { tx: "Asiento · TRANSFER", sum: "suma", ok: "el balance cierra", alice: "Alice", bob: "Bob" },
     },
     clover: {
       features: ["Combate con katanas, espadón, arco y magias de grimorio", "Aldea y Bosque del Este en un mundo isométrico, con día, noche y clima", "Pesca, misiones, tiendas e inventario", "Enemigos, un jefe (el Lobo Alfa) y una mascota que sigue y ataca", "Multijugador con chat y grupo", "Login con Discord o Google, 2 personajes por cuenta y guardado en la nube"],
@@ -345,11 +386,11 @@ export const TEXT: Record<Locale, Text> = {
     stackTitle: "Stack",
     stack: [
       { group: "Front y móvil", items: "TypeScript, JavaScript, React, React Native, Next.js, Vite, Tailwind CSS, Zustand, HTML, CSS" },
-      { group: "Back-end", items: "Node.js, NestJS, Java, Python, APIs REST, WebSocket, OAuth" },
+      { group: "Back-end", items: "Node.js, NestJS, Java, Spring Boot, Python, APIs REST, WebSocket, OAuth" },
       { group: "Datos", items: "PostgreSQL, Supabase, SQL, migraciones, RLS, presigned URLs (S3/R2)" },
       { group: "IA", items: "Agentes de IA, MCP, skills, Spec-Driven Development" },
       { group: "Cloud e infra", items: "Cloudflare, Docker, GitHub Actions, Grafana" },
-      { group: "Testing", items: "Jest, Vitest, Supertest" },
+      { group: "Testing", items: "JUnit, Testcontainers, Jest, Vitest, Supertest" },
     ],
     languagesTitle: "Idiomas",
     languages: "Portugués nativo, inglés intermedio",
